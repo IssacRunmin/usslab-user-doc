@@ -15,3 +15,11 @@ title: '写在前面'
 - 有问题请email: ourunmin@zju.edu.cn Before asking, refer to [this](https://github.com/selfteaching/How-To-Ask-Questions-The-Smart-Way/blob/master/How-To-Ask-Questions-The-Smart-Way.md)
 
 Happy using USSLAB HPC! 🥳
+
+## 参考链接
+
+网站还在建设中，以下是一些参考链接：
+- [中国科大超级计算中心用户使用文档](https://scc.ustc.edu.cn/zlsc/user_doc/html/index.html)
+- [武汉大学超算中心用户手册](https://docs.hpc.whu.edu.cn/)
+- [Slurm | Documentation](https://slurm.schedmd.com/documentation.html)
+- [Google | slurm-users](https://groups.google.com/g/slurm-users)
