@@ -13,19 +13,20 @@ title: '写在前面'
 为彻底解决此问题，缓解硬盘瓶颈，计划五一期间对网络文件系统进行数据迁移和升级。2025年4月30日-5月5日，对网络文件系统磁盘整理，开放`/mnt/data`。期间可能会影响到文件的读写操作，请提前做好数据备份。
 
 ### 具体安排：
-1. 4月30日-5月2日：`/mnt/data`：增加存储空间(30TB)，迁移各服务器旧数据（服务器未成立集群时候的/home目录）至`/mnt/data/old_home/<server>`中，预计存储增加到110TB。迁移方法：每个目录在复制到目标目录后进行格式化。迁移计划如下（服务器名称 - > 迁移目录 - > 迁移大小）：
+1. 4月30日-5月2日：`/mnt/data`：增加存储空间，迁移各服务器旧数据（服务器未成立集群时候的/home目录）至`/mnt/data/old_home/<server>`中，预计存储增加到110TB。迁移方法：每个目录在复制到目标目录后进行格式化。迁移计划如下（服务器名称 - > 迁移目录 - > 迁移大小）
     - [x] star: /home, 共8TB
-    - [ ] (ongoing) hermit: /home, 共16TB；/mnt/NewSSD，共8TB
+    - [x] hermit: /home, 共16TB；
+    - [ ] (ongoing) hermit: /mnt/NewSSD，共8TB
     - [ ] (ongoing) strength: /home, 共10TB
-    - [ ] sun: /mnt/local_home, 共16TB
+    - [x] sun: /mnt/local_home, 共16TB
     - [x] temperance: /home，共425GB
-    - [ ] moon: /home，共3.5TB
-    - [ ] magician: /home, /home/usslab/Documents，共17TB （后续重装系统*）
-    - [ ] fool: /home, /home/usslab/Documents，共17TB（后续重装系统*）
-    - 不迁移：warriors, justice, empress, lover
-    *注：视情况进行迁移，可能不足够空间
+    - [ ] (ongoing) moon: /home，共3.5TB
+    - [ ] magician: /home, /home/usslab/Documents，共17TB （后续重装系统\*）
+    - [ ] fool: /home, /home/usslab/Documents，共17TB（后续重装系统\*）
+    - 不迁移：warriors, justice, empress, lover 
+    - \*注：视情况进行迁移，可能不足够空间
 2. 【重要】5月2日至5月4日：`/mnt/home`迁移至`/mnt/data/home`。逐个用户迁移，迁移期间该用户无法登陆并锁定home目录，在跑任务的小伙伴默认不进行迁移，如果要五一期间跑任务的，请联系管理员迁移数据的时间。
-3. 5月4日至5月5日：将在节末（5月4日或5月5日，具体时间段另行提前通知）进行底层文件系统升级，期间将用户目录切换至`/mnt/data/home`
+3. 将在节末或节后（具体时间段另行提前通知）进行底层文件系统升级，期间将用户目录切换至`/mnt/data/home`
     - 格式化`/mnt/home`
     - 增加metadata SSD，提升文件系统性能
     - 机械硬盘从`/mnt/home`退出，加入到`/mnt/data`所在的文件系统中
