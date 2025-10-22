@@ -79,13 +79,86 @@ squeue：显示队列中的作业及作业步状态，含非常多过滤、排�
   - `QOSMinGRES`: 提交到GPU分区的作业没有申请GPU资源
   - `QOSMaxWallDurationPerJobLimit`: 设置的时间超过了比如`medium` QOS 限制的`--time=14-00:00:00`，14天
 
-### 查看作业情况sacct
+在`NODELIST`一栏，作业在运行时会显示所在节点，如下所示：
+
+```bash
+moon$ squeue --me
+JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+28537   highend code-tun ourunmin  R       0:51      1 node36
+```
+
+在有作业运行时候，可以登录到对应节点查看运行情况，可以使用`nvidia-smi`（驱动工具）或者`nvitop`（第三方工具，需要自己安装在python环境中）查看GPU使用情况。
+
+```bash
+moon$ ssh node36
+empress$ nvitop
+```
+![nvitop_output](./img/nvitop.webp)
+
+- 如果你的程序使用了显存，那么就会显示在下面
+- 如果一个节点有4张显卡，而你只请求了其中一张，那么会被分配0,1,2,3中的随机一张，可以在底下的进程中看自己的任务跑在哪个显卡上
+- 看上面部分自己任务对应的显卡的使用情况，MEM对应显存使用，UTL对应显卡运行效率
+- 如果MEM占用低，可以考虑调整batchsize等尽量跑满，或是在一张卡上多跑几个任务
+- 如果MEM有占用但UTL一直是0或者很低，说明显卡的运行效率很低或根本没用到显卡
+- **UTL占用高，说明服务器资源被充分使用了**
+
+注：没有作业会显示没有权限
+
+```bash
+moon$ ssh node31
+Access denied by pam_slurm_adopt: you have no active jobs on this node
+```
+
+退出：使用exit(或`Ctrl+D`)退回到登录节点
+```bash
+empress$ exit
+moon$
+```
+
+### 查看作业记账情况sacct
 
 sacct：显示激活的或已完成作业或作业步的记账信息。
+
+sreport：生成集群资源使用报告。
 
 
 ### 查看节点情况sinfo
 
+```
+PARTITION AVAIL  TIMELIMIT   JOB_SIZE ROOT OVERSUBS     GROUPS  NODES       STATE RESERVATION NODELIST
+highend      up   infinite          1   no    YES:4        all      2       mixed             node[29,36]
+highend      up   infinite          1   no    YES:4        all      1   allocated             node39
+normal*      up   infinite          1   no    YES:4        all      1     drained             node26
+normal*      up   infinite          1   no    YES:4        all      2       mixed             node[34,38]
+normal*      up   infinite          1   no    YES:4        all      1   allocated             node37
+normal*      up   infinite          1   no    YES:4        all      1        idle             node35
+normal*      up   infinite          1   no    YES:4        all      2        down             node[31,33]
+debug        up    1:00:00          1   no    YES:4        all      1       down*             node32
+ultra        up   infinite          1   no    YES:4        all      1     drained             node40
+```
+
+主要输出事项：
+- AVAIL：up表示可用，down表示不可用。
+- TIMELIMIT：作业运行墙上时间（walltime，指的是用计时器，如手表或挂钟，度量的实际时间）限制，infinite表示没限制，如有限制的话，其格式为“days-hours:minutes:seconds”。
+- STATE：节点状态，可能的状态包括：
+> - allocated、alloc：已分配。
+> - completing、comp：完成中。
+> - down：宕机。
+> - drained、drain：已失去活力。
+> - draining、drng：失去活力中。
+> - fail：失效。
+> - failing、failg：失效中。
+> - future、futr：将来可用。
+> - idle：空闲，可以接收新作业。
+> - maint：保持。
+> - mixed：混合，节点在运行作业，但有些空闲CPU核，可接受新作业。
+> - perfctrs、npc：因网络性能计数器使用中导致无法使用。
+> - power_down、pow_dn：已关机。
+> - power_up、pow_up：正在开机中。
+> - reserved、resv：预留。
+> - unknown、unk：未知原因。
+> 
+> 注意，如果状态带有后缀*，表示节点没响应。
 
 
 ## 作业操作
@@ -102,3 +175,8 @@ scancel <JobID>
 ```bash
 scancel -u ${USER}
 ```
+
+## TBC
+
+更多信息请参考:
+- https://scc.ustc.edu.cn/zlsc/user_doc/html/slurm/slurm.html
